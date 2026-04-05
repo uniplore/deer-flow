@@ -48,7 +48,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     sh -c "cd backend && UV_INDEX_URL=${UV_INDEX_URL:-https://pypi.org/simple} uv sync"
 
 # Expose ports (gateway: 8001, langgraph: 2024)
-EXPOSE 8001 2024
+EXPOSE 8001 9000
 
 # Default command (can be overridden in docker-compose)
-CMD ["sh", "-c", "cd backend && PYTHONPATH=. uv run uvicorn app.gateway.app:app --host 0.0.0.0 --port 8001"]
+CMD ["sh", "-c", "cd backend && PYTHONPATH=. uv run langgraph dev --no-browser --allow-blocking --no-reload --port 9000 --host 0.0.0.0"]

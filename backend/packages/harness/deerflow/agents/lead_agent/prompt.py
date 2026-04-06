@@ -26,13 +26,21 @@ def _build_subagent_section(max_concurrent: int) -> str:
         Formatted subagent section string.
     """
     n = max_concurrent
-    bash_available = "bash" in get_available_subagent_names()
-    available_subagents = (
-        "- **general-purpose**: For ANY non-trivial task - web research, code exploration, file operations, analysis, etc.\n- **bash**: For command execution (git, build, test, deploy operations)"
-        if bash_available
-        else "- **general-purpose**: For ANY non-trivial task - web research, code exploration, file operations, analysis, etc.\n"
-        "- **bash**: Not available in the current sandbox configuration. Use direct file/web tools or switch to AioSandboxProvider for isolated shell access."
-    )
+    available_names = get_available_subagent_names()
+    bash_available = "bash" in available_names
+
+    lines = [
+        "- **general-purpose**: For ANY non-trivial task - web research, code exploration, file operations, analysis, etc.",
+    ]
+    if bash_available:
+        lines.append("- **bash**: For command execution (git, build, test, deploy operations)")
+    else:
+        lines.append("- **bash**: Not available in the current sandbox configuration. Use direct file/web tools or switch to AioSandboxProvider for isolated shell access.")
+    if "paper-draft-agent" in available_names:
+        lines.append("- **paper-draft-agent**: For generating, drafting, and reviewing academic research papers through a multi-stage pipeline (research ideation, literature-driven drafting, multi-perspective review, iterative refinement)")
+    if "paper-summarize-agent" in available_names:
+        lines.append("- **paper-summarize-agent**: For reading, analyzing, and summarizing academic papers (full summary, question-driven analysis, key findings extraction)")
+    available_subagents = "\n".join(lines)
     direct_tool_examples = "bash, ls, read_file, web_search, etc." if bash_available else "ls, read_file, web_search, etc."
     direct_execution_example = (
         '# User asks: "Run the tests"\n# Thinking: Cannot decompose into parallel sub-tasks\n# → Execute directly\n\nbash("npm test")  # Direct execution, not task()'

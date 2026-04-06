@@ -9,6 +9,7 @@ description: Use this skill when generating, drafting, or reviewing academic res
 
 This skill provides a systematic multi-stage pipeline for generating high-quality academic research paper drafts. It combines real-time literature retrieval with structured ideation, multi-perspective review, and iterative refinement to produce publication-ready drafts.
 
+
 ## When to Use This Skill
 
 - User asks to generate, write, or create a research paper draft
@@ -133,9 +134,9 @@ Select the most promising hypothesis and develop it into a structured research i
 [Brief summary of how this differs from existing approaches]
 ```
 
-### Step 1.6: Save Output
+### Step 1.6: Proceed to Stage 2
 
-Save the complete Stage 1 output to `/mnt/user-data/workspace/paper-draft/stage_1_ideation.md`.
+Carry the research idea and reference list forward to Stage 2. Do not save intermediate files.
 
 ## Stage 2: Literature-Driven Drafting
 
@@ -165,77 +166,23 @@ For each of the top 5-6 technical entities:
 
 ### Step 2.3: Draft Generation
 
-Generate a complete paper draft following this structure:
+Generate a concise paper draft. This is a DRAFT — keep every section brief and distilled. Use only `#` (level-1 headings).
 
-#### Problem Section
-- Define the research problem with sufficient context
-- Explain why this problem is important and timely
-- Quantify the problem's impact if possible (cite statistics from literature)
-- Clearly state what gap in existing work this paper addresses
+| Section | Length Guideline | Content |
+|---------|-----------------|---------|
+| `# Problem` | 2-3 sentences | Core problem and context |
+| `# Rationale` | 1-2 sentences | Why it matters, what gap it fills |
+| `# Technical Approach` | 2-4 sentences | Key concepts, algorithms, frameworks — only the essentials |
+| `# Datasets` | Bullet list | Datasets with one-line justification each |
+| `# Title` | One line | Specific, publication-quality title |
+| `# Abstract` | 100-200 words | Problem, method, expected result, contribution — no filler |
+| `# Methods` | 3-5 sentences | Model architecture, training procedure, key components — distilled |
+| `# Experiments` | 2-4 sentences | Baselines, datasets, metrics, expected results — concise |
+| `# Reference` | Numbered list | Only real papers found via search; format: `[N]. [Authors] "[Title]" [Venue], [Year]. arXiv:[ID]` |
 
-#### Rationale Section
-- Explain the intuition behind the proposed approach
-- Connect the approach to relevant theoretical foundations
-- Discuss why existing solutions are insufficient
-- Argue why the proposed approach is well-suited to the problem
+### Step 2.4: Proceed to Stage 3
 
-#### Necessary Technical Details Section
-- Describe the key algorithms, models, or frameworks
-- Include mathematical formulations where appropriate
-- Explain architectural choices and their justifications
-- Discuss computational complexity and scalability considerations
-
-#### Datasets Section
-- List specific datasets to be used (with citations)
-- Justify dataset choices (relevance, size, diversity)
-- Describe any data preprocessing or augmentation needed
-- Mention dataset statistics (size, number of classes, etc.) if known
-
-#### Paper Title
-- Specific, descriptive, and compelling
-- Reflects the core contribution
-- Follows conventions of the target venue
-- Avoids overly broad or vague titles
-
-**Title formula examples:**
-- "[Method Name]: [What it does] for [Application/Problem]"
-- "[Adjective] [Noun] via [Technique] for [Task]"
-- "Towards [Goal]: A [Approach] Approach to [Problem]"
-
-#### Paper Abstract
-- 150-300 words
-- Structure: Problem (1-2 sentences) → Gap (1 sentence) → Method (2-3 sentences) → Results (1-2 sentences) → Contribution (1 sentence)
-- Be specific about the approach and expected outcomes
-- Do not use undefined acronyms
-
-#### Methods Section
-- Detailed description of the proposed approach
-- Include model architecture, training procedure, key components
-- Reference specific techniques from the literature deep-dive
-- Include mathematical notation for key equations
-- Describe any novel components in detail
-
-#### Experiments Section
-- **Baselines:** List specific methods to compare against (with citations)
-- **Datasets:** Reference the datasets from the Datasets section
-- **Metrics:** Define evaluation metrics and why they are appropriate
-- **Implementation details:** Framework, hyperparameters, hardware
-- **Expected results:** What improvements are anticipated and why
-
-**Baselines selection guidelines:**
-- Include the current state-of-the-art for the task
-- Include classic/baseline methods for the problem
-- Include ablated versions of the proposed method
-- Aim for 4-6 baselines minimum
-
-#### Reference Section
-- Numbered list format
-- Only include papers that were actually found in searches
-- Format: `[N]. [Authors] "[Title]" [Venue/Journal], [Year].`
-
-### Step 2.4: Save Output
-
-Save the complete draft to `/mnt/user-data/workspace/paper-draft/stage_2_draft.md`.
+Carry the draft and reference list forward to Stage 3. Do not save intermediate files.
 
 ## Stage 3: Multi-Perspective Review
 
@@ -324,9 +271,9 @@ Synthesize the three reviews into a prioritized action plan:
 - [Section name]: [Specific improvements needed]
 ```
 
-### Step 3.4: Save Output
+### Step 3.4: Proceed to Stage 4
 
-Save the review report to `/mnt/user-data/workspace/paper-draft/stage_3_review.md`.
+Carry the draft, review, and reference list forward to Stage 4. Do not save intermediate files.
 
 ## Stage 4: Iterative Refinement
 
@@ -366,31 +313,11 @@ Produce the complete revised draft with all improvements applied. The revised dr
 - Address every weakness identified in the review
 - Incorporate insights from supplementary literature
 - Include updated references
+- Do NOT include any "Summary of Changes" section — the final draft should be clean
 
-### Step 4.4: Change Summary
+### Step 4.5: Proceed to Stage 5
 
-Add a summary section documenting improvements:
-
-```
-### Summary of Changes
-
-**Based on Technical Feasibility Review:**
-- [Change 1]: [What was changed and why]
-
-**Based on Novelty & Significance Review:**
-- [Change 2]: [What was changed and why]
-
-**Based on Experimental Rigor Review:**
-- [Change 3]: [What was changed and why]
-
-**New Literature Incorporated:**
-- [Paper 1]: [How it informed the revision]
-- [Paper 2]: [How it informed the revision]
-```
-
-### Step 4.5: Save Output
-
-Save the revised draft to `/mnt/user-data/workspace/paper-draft/stage_4_revised.md`.
+Carry the revised draft and final reference list forward to Stage 5.
 
 ## Stage 5: Final Output
 
@@ -407,32 +334,14 @@ Format the final draft and deliver the output.
 ### Step 5.2: Quality Check
 
 Verify the final draft:
+- [ ] Uses only `#` (level-1 headings)
+- [ ] Every section is concise and distilled (not a detailed exposition)
 - [ ] Title is compelling and specific
-- [ ] Abstract is 150-300 words and self-contained
-- [ ] Problem is clearly defined
-- [ ] Methodology is described in sufficient detail
-- [ ] Experimental design includes appropriate baselines
-- [ ] All references are real and properly formatted
+- [ ] Abstract is 100-200 words
+- [ ] All references are real and properly formatted (with arXiv IDs)
 - [ ] No sections are empty or placeholder
-- [ ] Logical flow between sections
+- [ ] Minimum 10 references
 
-### Step 5.3: Save Final Output
-
-Save the final English draft to `/mnt/user-data/outputs/paper_draft_en.md`.
-
-If Chinese translation was requested:
-- Translate the draft preserving academic terminology
-- Add English terms in parentheses for first-occurrence technical terms
-- Save to `/mnt/user-data/outputs/paper_draft_zh.md`
-
-### Step 5.4: Return Summary
-
-Return a concise summary including:
-- Paper title
-- One-paragraph abstract
-- Key contributions (numbered list)
-- Total references cited
-- File paths to saved outputs
 
 ## Quality Standards
 

@@ -7,7 +7,7 @@ description: Use this skill when generating, drafting, or reviewing academic res
 
 ## Overview
 
-This skill provides a systematic multi-stage pipeline for generating high-quality academic research paper drafts. It combines real-time literature retrieval with structured ideation, multi-perspective review, and iterative refinement to produce publication-ready drafts.
+This skill provides a streamlined 3-stage pipeline for generating high-quality academic research paper drafts. It combines real-time literature retrieval with structured ideation and self-review to produce publication-ready drafts efficiently.
 
 
 ## When to Use This Skill
@@ -41,10 +41,10 @@ From any input, extract:
 5. **Subject field** - CS, Biology, Medicine, etc.
 6. **Language** - English (default) or Chinese
 
-## Stage 1: Research & Ideation
+## Stage 1: Research, Ideation & Drafting
 
 ### Objective
-Conduct a comprehensive literature survey and formulate a structured research idea.
+Conduct literature survey, formulate research idea, and generate a complete paper draft in one pass.
 
 ### Step 1.1: Keyword Expansion
 
@@ -54,11 +54,9 @@ Expand the input topic into 5-8 related technical keywords. Consider:
 - Application domains
 - Recent trends and emerging directions
 
-**Strategy:** Think about what terms researchers in this field would use when searching for related work. Include both broad terms (for coverage) and specific terms (for precision).
-
 ### Step 1.2: Literature Search
 
-Use `search_arxiv_papers` to search for papers:
+Use `search_arxiv_papers` to search for papers — launch ALL keyword searches in parallel:
 - Search with the main topic first (aim for 5-10 results)
 - Then search with each related keyword (aim for 2-3 results per keyword)
 - Target: 15-25 papers total across all searches
@@ -71,14 +69,15 @@ Use `search_arxiv_papers` to search for papers:
 
 ### Step 1.3: Literature Analysis
 
-For the most relevant 8-10 papers, extract structured information:
+Use `analyze_arxiv_paper` on the 4-5 most relevant papers to get detailed content (methods, experiments, innovations).
 
-For each paper, document:
+For each analyzed paper, document:
 ```
 Paper: [Title]
 Authors: [Authors]
 Year: [Year]
 Venue: [Venue/Journal]
+arXiv ID: [ID]
 
 Problem: What specific problem does this paper address?
 Method: What approach/algorithm/framework does it propose?
@@ -88,25 +87,17 @@ Limitations: What gaps or weaknesses does the paper acknowledge or imply?
 Relevance: How does this relate to our research idea? (direct/indirect/contrast)
 ```
 
-### Step 1.4: Research Hypothesis Generation
+For remaining papers (not deeply analyzed), record: authors, title, year, venue, arXiv ID, and URL.
 
-Based on the literature analysis, generate 3-5 research hypotheses using:
+**IMPORTANT: Record the URL for every paper** — use the arXiv abs page URL (`https://arxiv.org/abs/YYMM.NNNNN`), DOI link (`https://doi.org/...`), or publisher page. This URL is needed for clickable in-text citations.
 
-**Inductive reasoning:** What patterns do you observe across multiple papers? What common limitations exist? What gaps are repeatedly mentioned?
+### Step 1.4: Research Idea Formulation
 
-**Deductive reasoning:** If a certain approach works well for problem A, could it be adapted for problem B? What would happen if we combined technique X with technique Y?
+Based on the literature analysis:
 
-**Format each hypothesis as:**
-```
-Hypothesis N: [Clear, specific, testable statement]
-- Basis: [What existing work supports this direction]
-- Expected contribution: [What new value this would provide]
-- Feasibility: [High/Medium/Low - why]
-```
-
-### Step 1.5: Research Idea Formulation
-
-Select the most promising hypothesis and develop it into a structured research idea:
+1. Generate 3-5 research hypotheses grounded in the literature
+2. Select the most promising hypothesis
+3. Develop it into a structured research idea:
 
 ```
 ## Research Idea
@@ -129,67 +120,45 @@ Select the most promising hypothesis and develop it into a structured research i
 
 ### Preliminary Title
 [Compelling, specific title]
-
-### Related Work Summary
-[Brief summary of how this differs from existing approaches]
 ```
 
-### Step 1.6: Proceed to Stage 2
+### Step 1.5: Draft Generation
 
-Carry the research idea and reference list forward to Stage 2. Do not save intermediate files.
+Generate a concise paper draft immediately after ideation. This is a DRAFT — keep every section brief and distilled. Use only `#` (level-1 headings).
 
-## Stage 2: Literature-Driven Drafting
-
-### Objective
-Generate a complete paper draft grounded in deep literature analysis.
-
-### Step 2.1: Technical Entity Extraction
-
-From the Stage 1 research idea, identify 5-8 key technical entities:
-- Specific algorithms or models mentioned
-- Frameworks or architectures to be used/extended
-- Datasets or benchmarks relevant to the problem
-- Evaluation metrics or methodologies
-- Theoretical concepts underlying the approach
-
-Rank them by importance (how central they are to the proposed method).
-
-### Step 2.2: Targeted Literature Deep-Dive
-
-For each of the top 5-6 technical entities:
-1. Use `search_arxiv_papers` to find 2-3 highly relevant papers
-2. For the most important 3-5 papers, use `analyze_arxiv_paper` to get:
-   - Detailed methodology description
-   - Experimental setup and results
-   - Innovation points and technical details
-   - Comparison with other approaches
-
-### Step 2.3: Draft Generation
-
-Generate a concise paper draft. This is a DRAFT — keep every section brief and distilled. Use only `#` (level-1 headings).
+**CRITICAL: Every section MUST contain clickable in-text citations `[N](url)` linking to the reference list.**
 
 | Section | Length Guideline | Content |
 |---------|-----------------|---------|
-| `# Problem` | 2-3 sentences | Core problem and context |
-| `# Rationale` | 1-2 sentences | Why it matters, what gap it fills |
-| `# Technical Approach` | 2-4 sentences | Key concepts, algorithms, frameworks — only the essentials |
-| `# Datasets` | Bullet list | Datasets with one-line justification each |
+| `# Problem` | 2-3 sentences | Core problem and context, with clickable citations like "Recent studies [1](https://arxiv.org/abs/2401.12345), [2](url) have shown..." |
+| `# Rationale` | 1-2 sentences | Why it matters, what gap it fills, with clickable citations like "Existing approaches [3](url), [4](url) suffer from..." |
+| `# Technical Approach` | 2-4 sentences | Key concepts, algorithms, frameworks, with clickable citations like "Building on [5](url), we propose..." |
+| `# Datasets` | Bullet list | Datasets with one-line justification and clickable citations, e.g., "- ImageNet-1K [6](https://arxiv.org/abs/1409.0575): standard benchmark for..." |
 | `# Title` | One line | Specific, publication-quality title |
-| `# Abstract` | 100-200 words | Problem, method, expected result, contribution — no filler |
-| `# Methods` | 3-5 sentences | Model architecture, training procedure, key components — distilled |
-| `# Experiments` | 2-4 sentences | Baselines, datasets, metrics, expected results — concise |
-| `# Reference` | Numbered list | Only real papers found via search; format: `[N]. [Authors] "[Title]" [Venue], [Year]. arXiv:[ID]` |
+| `# Abstract` | 100-200 words | Problem, method, expected result, contribution — no filler, with key clickable citations |
+| `# Methods` | 3-5 sentences | Model architecture, training procedure, key components, with clickable citations like "We adopt [7](url) with modifications inspired by [8](url)" |
+| `# Experiments` | 2-4 sentences | Baselines, datasets, metrics, expected results, with clickable citations like "We compare against [9](url), [10](url) as primary baselines" |
+| `# Reference` | Numbered list | Only real papers found via search; format: `[N]. [Authors] "[Title]" [Venue], [Year]. arXiv:[ID] — [View Paper](url)` |
 
-### Step 2.4: Proceed to Stage 3
+### Step 1.6: Citation Cross-Check
 
-Carry the draft and reference list forward to Stage 3. Do not save intermediate files.
+Before proceeding, verify:
+- Every `[N](url)` in the body has a matching entry in `# Reference`
+- Every entry in `# Reference` is cited at least once in the body
+- Every in-text citation uses clickable `[N](url)` format — NOT plain `[N]`
+- Every Reference entry includes a clickable URL
+- No fabricated references — all papers must have been found via `search_arxiv_papers`
 
-## Stage 3: Multi-Perspective Review
+### Step 1.7: Proceed to Stage 2
+
+Carry the draft and reference list forward to Stage 2. Do not save intermediate files.
+
+## Stage 2: Self-Review & Refinement
 
 ### Objective
-Critically evaluate the draft from three independent perspectives.
+Critically evaluate the draft and address weaknesses with targeted improvements.
 
-### Step 3.1: Three-Dimensional Review
+### Step 2.1: Three-Dimensional Self-Review
 
 Review the draft independently from three perspectives. **Be critical and specific.**
 
@@ -198,22 +167,15 @@ Review the draft independently from three perspectives. **Be critical and specif
 Evaluate:
 - Are the proposed methods technically sound?
 - Are there obvious implementation challenges or bottlenecks?
-- Are the computational requirements realistic?
 - Are the assumptions reasonable?
 - Are there simpler alternatives that could achieve similar results?
-- Is the mathematical formulation correct and complete?
-- Are there potential failure modes or edge cases?
 
 #### Perspective B: Novelty & Significance (Score: 1-10)
 
 Evaluate:
 - Does the paper make a clear novel contribution?
 - How does it compare to the closest existing work?
-- Is the problem worth solving? Who would benefit?
-- Would the target community find this interesting?
 - Is the contribution incremental or transformative?
-- Does it open new research directions?
-- Is the title and abstract compelling?
 
 #### Perspective C: Experimental Rigor (Score: 1-10)
 
@@ -221,126 +183,67 @@ Evaluate:
 - Are the baselines appropriate, recent, and sufficient?
 - Are the datasets representative and standard?
 - Are the evaluation metrics well-chosen?
-- Are there missing ablation studies?
-- Are there missing comparisons?
-- Is the experimental setup reproducible?
-- Are the expected results realistic?
+- Are there missing ablation studies or comparisons?
 
-### Step 3.2: Review Report
+### Step 2.2: Gap Identification
 
-For each perspective, provide:
+From the review, identify specific, actionable weaknesses:
+- Missing baselines or related work that should be cited
+- Weak or vague methodology descriptions
+- Insufficient experimental design
+- Uncited important papers
 
-```
-## [Perspective Name] (Score: X/10)
+### Step 2.3: Conditional Supplementary Search
 
-**Strengths:**
-- [Specific strength with evidence from the draft]
+**Only search if the review reveals significant gaps.** If the draft is already strong, skip to Step 2.4.
 
-**Weaknesses:**
-- [Specific weakness with suggestion for improvement]
+If gaps are found:
+1. Use `search_arxiv_papers` with 1-3 targeted keywords to fill specific gaps (NOT a broad re-survey)
+2. Use `analyze_arxiv_paper` only if a newly found paper is directly relevant to the proposed method
+3. Add newly found papers to the reference list
 
-**Improvement Suggestions:**
-1. [Actionable suggestion with expected impact]
-2. [Actionable suggestion with expected impact]
-```
+### Step 2.4: Generate Revised Draft
 
-### Step 3.3: Optimization Plan
-
-Synthesize the three reviews into a prioritized action plan:
-
-```
-## Optimization Plan
-
-### Priority 1: [Most Critical Issue]
-- **Issue:** [Clear description]
-- **Perspective:** [Which review identified it]
-- **Action:** [Specific steps to fix]
-- **Literature needed:** [Keywords to search]
-
-### Priority 2: [Second Most Critical]
-...
-
-### Priority 3: [Third Most Critical]
-...
-
-### Additional Literature Directions
-- Search: [keyword 1] - to find [what]
-- Search: [keyword 2] - to find [what]
-
-### Sections Requiring Revision
-- [Section name]: [Specific improvements needed]
-```
-
-### Step 3.4: Proceed to Stage 4
-
-Carry the draft, review, and reference list forward to Stage 4. Do not save intermediate files.
-
-## Stage 4: Iterative Refinement
-
-### Objective
-Address all review feedback and produce a polished final draft.
-
-### Step 4.1: Supplementary Literature Search
-
-For each "Literature needed" item from the optimization plan:
-1. Use `search_arxiv_papers` with the suggested keywords
-2. For the most relevant new papers, use `analyze_arxiv_paper`
-3. Document how each new paper informs the revision
-
-### Step 4.2: Systematic Revision
-
-Address each priority improvement in order:
-
-**For Priority 1 (typically a major issue):**
-- May require restructuring a section or adding significant content
-- Search for supporting literature before revising
-- Ensure the fix doesn't introduce new problems
-
-**For Priority 2 (typically a content gap):**
-- Add missing information or comparisons
-- Strengthen weak arguments with evidence
-- Add missing baselines or experiments to the plan
-
-**For Priority 3 (typically a quality improvement):**
-- Improve clarity and readability
-- Fix formatting or organizational issues
-- Strengthen the abstract or introduction
-
-### Step 4.3: Generate Revised Draft
-
-Produce the complete revised draft with all improvements applied. The revised draft should:
-- Follow the same format as Stage 2
+Produce the complete revised draft addressing all identified weaknesses:
+- Follow the same format as Stage 1
 - Address every weakness identified in the review
-- Incorporate insights from supplementary literature
-- Include updated references
+- Incorporate insights from supplementary literature (if searched)
+- Update in-text citations and reference list
 - Do NOT include any "Summary of Changes" section — the final draft should be clean
 
-### Step 4.5: Proceed to Stage 5
+### Step 2.5: Citation Cross-Check
 
-Carry the revised draft and final reference list forward to Stage 5.
+Same as Step 1.6 — verify every `[N](url)` matches a Reference entry and vice versa. Ensure at least 10 references, each with a clickable URL.
 
-## Stage 5: Final Output
+### Step 2.6: Proceed to Stage 3
+
+Carry the revised draft and final reference list forward to Stage 3.
+
+## Stage 3: Final Output
 
 ### Objective
-Format the final draft and deliver the output.
+Verify, format, and deliver the final draft.
 
-### Step 5.1: Reference Verification
+### Step 3.1: Final Verification
 
-- Verify all cited papers were actually found in searches
-- Ensure reference format is consistent
-- Check that all in-text references have corresponding entries
-- Remove any fabricated or unverified references
+- Verify all cited papers were actually found in searches — remove any fabricated entries
+- Ensure reference count is at least 10 — if fewer, search for more and add them
+- Verify reference format: `[N]. [Authors] "[Title]" [Venue], [Year]. arXiv:[ID] — [View Paper](url)`
+- Verify every in-text citation uses clickable link format `[N](url)` — NOT plain `[N]`
+- Cross-check: every `[N](url)` in the body matches a Reference entry and vice versa
 
-### Step 5.2: Quality Check
+### Step 3.2: Quality Check
 
 Verify the final draft:
 - [ ] Uses only `#` (level-1 headings)
 - [ ] Every section is concise and distilled (not a detailed exposition)
 - [ ] Title is compelling and specific
 - [ ] Abstract is 100-200 words
-- [ ] All references are real and properly formatted (with arXiv IDs)
+- [ ] All references are real and properly formatted (with arXiv IDs and clickable URLs)
 - [ ] No sections are empty or placeholder
 - [ ] Minimum 10 references
+- [ ] Every Reference entry is cited in the body
+- [ ] Every in-text citation uses `[N](url)` clickable link format (NOT plain `[N]`)
 
 
 ## Quality Standards
@@ -353,6 +256,7 @@ A high-quality paper draft should:
 - Have a **compelling** title that communicates the contribution
 - Be **self-contained** (readable without external context)
 - Demonstrate **awareness** of the field (appropriate related work coverage)
+- Have **clickable in-text citations in every section** — every `[N]` must be a markdown link `[N](url)` to the paper page
 
 ## Common Pitfalls to Avoid
 
@@ -360,6 +264,8 @@ A high-quality paper draft should:
 - **Generic methods**: Proposing "deep learning" without architectural details
 - **Missing baselines**: Not comparing against well-known approaches
 - **Fabricated citations**: Referencing papers that were not actually found
+- **Orphan references**: Papers listed in Reference section but never cited in the body with `[N](url)`
+- **Non-clickable citations**: Using plain `[N]` instead of `[N](url)` — readers cannot click through to the paper
 - **Overly broad scope**: Trying to solve everything rather than focusing on a specific contribution
 - **Weak experimental design**: Missing ablations, wrong metrics, insufficient baselines
 - **Title mismatch**: Title doesn't reflect the actual contribution

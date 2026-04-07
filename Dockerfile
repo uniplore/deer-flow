@@ -51,4 +51,5 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 EXPOSE 8001 9000
 
 # Default command (can be overridden in docker-compose)
-CMD ["sh", "-c", "cd backend && PYTHONPATH=. uv run langgraph dev --no-browser --allow-blocking --no-reload --port 9000 --host 0.0.0.0"]
+#CMD ["sh", "-c", "cd backend && PYTHONPATH=. uv run langgraph dev --no-browser --allow-blocking --no-reload --port 9000 --host 0.0.0.0"]
+CMD ["sh", "-c", "cd backend && PYTHONPATH=. uv run uvicorn app.gateway.app:app --host 0.0.0.0 --port 9000"]

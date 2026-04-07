@@ -11,6 +11,7 @@ from app.gateway.routers import (
     artifacts,
     assistants_compat,
     channels,
+    downloads,
     mcp,
     memory,
     models,
@@ -133,6 +134,10 @@ This gateway provides custom endpoints for models, MCP configuration, skills, an
                 "description": "Upload and manage user files for threads",
             },
             {
+                "name": "downloads",
+                "description": "Download agent-generated artifacts from thread outputs directory",
+            },
+            {
                 "name": "threads",
                 "description": "Manage DeerFlow thread-local filesystem data",
             },
@@ -190,6 +195,9 @@ This gateway provides custom endpoints for models, MCP configuration, skills, an
 
     # Uploads API is mounted at /api/threads/{thread_id}/uploads
     app.include_router(uploads.router)
+
+    # Downloads API is mounted at /api/threads/{thread_id}/downloads
+    app.include_router(downloads.router)
 
     # Thread cleanup API is mounted at /api/threads/{thread_id}
     app.include_router(threads.router)

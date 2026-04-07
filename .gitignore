@@ -57,3 +57,4 @@ config.yaml.bak
 
 agentflow/
 uniresearch/
+.worktrees

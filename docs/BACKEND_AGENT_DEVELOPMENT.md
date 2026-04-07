@@ -47,7 +47,7 @@ backend/
 | 特性声明 | [backend/packages/harness/deerflow/agents/features.py](../backend/packages/harness/deerflow/agents/features.py) |
 | 任务工具 | [backend/packages/harness/deerflow/tools/builtins/task_tool.py](../backend/packages/harness/deerflow/tools/builtins/task_tool.py) |
 | Bash Agent 示例 | [backend/packages/harness/deerflow/subagents/builtins/bash_agent.py](../backend/packages/harness/deerflow/subagents/builtins/bash_agent.py) |
-| 论文写作 Agent | [backend/packages/harness/deerflow/subagents/builtins/thesis_writer.py](../backend/packages/harness/deerflow/subagents/builtins/thesis_writer.py) |
+| 论文写作 Agent | [backend/packages/harness/deerflow/subagents/builtins/paper_draft_agent.py](../backend/packages/harness/deerflow/subagents/builtins/paper_draft_agent.py) |
 
 ---
 

@@ -58,3 +58,5 @@ config.yaml.bak
 agentflow/
 uniresearch/
 .worktrees
+
+deer-flow-backend/

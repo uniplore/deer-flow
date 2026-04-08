@@ -124,7 +124,7 @@ Based on the literature analysis:
 
 ### Step 1.5: Draft Generation
 
-Generate a concise paper draft immediately after ideation. This is a DRAFT — keep every section brief and distilled. Use only `#` (level-1 headings).
+Generate a concise paper draft immediately after ideation. This is a DRAFT — keep every section focused and substantive, neither too brief nor too verbose. Use only `#` (level-1 headings).
 
 **CRITICAL RULES FOR CITATIONS:**
 1. **Every section (except `# Title`) MUST contain clickable in-text citations `[N](url)`.**
@@ -133,15 +133,15 @@ Generate a concise paper draft immediately after ideation. This is a DRAFT — k
 
 | Section | Length Guideline | Content |
 |---------|-----------------|---------|
-| `# Problem` | 2-3 sentences | Core problem and context, with clickable citations like "Recent studies [1](https://arxiv.org/abs/2401.12345), [2](url) have shown..." |
-| `# Rationale` | 1-2 sentences | Why it matters, what gap it fills, with clickable citations like "Existing approaches [3](url), [4](url) suffer from..." |
-| `# Related Work` | 2-4 sentences | Brief survey of closely related approaches. **MUST cite any papers from your search that are NOT yet cited in other sections** — this is the guaranteed citation home for all references. |
-| `# Technical Approach` | 2-4 sentences | Key concepts, algorithms, frameworks, with clickable citations like "Building on [5](url), we propose..." |
+| `# Problem` | 3-5 sentences | Core problem, background context, and why it matters, with clickable citations like "Recent studies [1](https://arxiv.org/abs/2401.12345), [2](url) have shown..." |
+| `# Rationale` | 2-4 sentences | Why it matters, what gap it fills, limitations of existing work, with clickable citations like "Existing approaches [3](url), [4](url) suffer from..." |
+| `# Related Work` | 4-8 sentences | Concise survey of closely related approaches grouped by theme. **MUST cite any papers from your search that are NOT yet cited in other sections** — this is the guaranteed citation home for all references. |
+| `# Technical Approach` | 4-7 sentences | Key concepts, algorithms, frameworks, and how components connect, with clickable citations like "Building on [5](url), we propose..." |
 | `# Datasets` | Bullet list | Datasets with one-line justification and clickable citations, e.g., "- ImageNet-1K [6](https://arxiv.org/abs/1409.0575): standard benchmark for..." |
 | `# Title` | One line | Specific, publication-quality title |
-| `# Abstract` | 100-200 words | Problem, method, expected result, contribution — no filler, with key clickable citations |
-| `# Methods` | 3-5 sentences | Model architecture, training procedure, key components, with clickable citations like "We adopt [7](url) with modifications inspired by [8](url)" |
-| `# Experiments` | 2-4 sentences | Baselines, datasets, metrics, expected results, with clickable citations like "We compare against [9](url), [10](url) as primary baselines" |
+| `# Abstract` | 150-250 words | Problem, method, expected result, contribution — no filler, with key clickable citations |
+| `# Methods` | 5-8 sentences | Model architecture, training procedure, key components, loss functions, with clickable citations like "We adopt [7](url) with modifications inspired by [8](url)" |
+| `# Experiments` | 4-7 sentences | Baselines, datasets, metrics, evaluation protocol, expected results, with clickable citations like "We compare against [9](url), [10](url) as primary baselines" |
 | `# Reference` | Numbered list | **ONLY include papers that are cited in the body.** Format: `[N]. [Authors] "[Title]" [Venue], [Year]. arXiv:[ID] — [View Paper](url)` |
 
 ### Step 1.6: Citation Cross-Check
@@ -254,7 +254,7 @@ Verify the final draft:
 - [ ] Uses only `#` (level-1 headings)
 - [ ] Every section is concise and distilled (not a detailed exposition)
 - [ ] Title is compelling and specific
-- [ ] Abstract is 100-200 words
+- [ ] Abstract is 150-250 words
 - [ ] All references are real and properly formatted (with arXiv IDs and clickable URLs)
 - [ ] No sections are empty or placeholder
 - [ ] Minimum 10 references

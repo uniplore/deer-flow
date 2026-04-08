@@ -39,7 +39,7 @@ From any input, extract:
 3. **Methodological hints** - Preferred approaches or techniques (if mentioned)
 4. **Target format** - Conference paper, journal article, survey, etc.
 5. **Subject field** - CS, Biology, Medicine, etc.
-6. **Language** - English (default) or Chinese
+6. **Language** - Chinese (default) or English. Only switch to English if the user explicitly requests it (e.g., "用英文写", "in English").
 
 ## Stage 1: Research, Ideation & Drafting
 
@@ -126,10 +126,23 @@ Based on the literature analysis:
 
 Generate a concise paper draft immediately after ideation. This is a DRAFT — keep every section focused and substantive, neither too brief nor too verbose. Use only `#` (level-1 headings).
 
+**LANGUAGE RULE: By default, generate the entire draft in Chinese, including the title, all section headings, and body text. Only use English if the user explicitly requests it.**
+
+**CRITICAL — REFERENCE CONSTRUCTION RULE (THIS IS THE MOST IMPORTANT RULE IN THIS DOCUMENT):**
+
+> **The `# Reference` section MUST be constructed BY EXTRACTING citations from the body text, NOT by listing papers independently.**
+>
+> Follow this exact order:
+> 1. First, write ALL body sections (`# Problem`, `# Rationale`, `# Related Work`, `# Technical Approach`, `# Datasets`, `# Title`, `# Abstract`, `# Methods`, `# Experiments`) with `[N](url)` in-text citations.
+> 2. Then, scan every body section and collect ALL unique `[N](url)` citations that appear in the text.
+> 3. Finally, build the `# Reference` list using ONLY those collected citation numbers. Each `[N]` in Reference corresponds to exactly one `[N](url)` found in the body.
+>
+> **NEVER add a paper to `# Reference` that does not have a matching `[N](url)` in the body.** This rule alone prevents orphan references.
+
 **CRITICAL RULES FOR CITATIONS:**
 1. **Every section (except `# Title`) MUST contain clickable in-text citations `[N](url)`.**
-2. **Every paper in the Reference list MUST be cited at least once in the body.** Do NOT add papers to Reference that you don't cite in the text.
-3. **Use `# Related Work` as the "safety net" section** — if any papers from your search have not been cited in Problem/Rationale/Methods/Experiments, you MUST cite them here. This ensures zero orphan references.
+2. **Use `# Related Work` as the "safety net" section** — if any papers from your search have not been cited in Problem/Rationale/Methods/Experiments, you MUST cite them here. This ensures all searched papers get cited in the body.
+3. **Reference is derived from body, not the other way around.** Build Reference by extracting `[N]` from the body text.
 
 | Section | Length Guideline | Content |
 |---------|-----------------|---------|
@@ -142,20 +155,17 @@ Generate a concise paper draft immediately after ideation. This is a DRAFT — k
 | `# Abstract` | 150-250 words | Problem, method, expected result, contribution — no filler, with key clickable citations |
 | `# Methods` | 5-8 sentences | Model architecture, training procedure, key components, loss functions, with clickable citations like "We adopt [7](url) with modifications inspired by [8](url)" |
 | `# Experiments` | 4-7 sentences | Baselines, datasets, metrics, evaluation protocol, expected results, with clickable citations like "We compare against [9](url), [10](url) as primary baselines" |
-| `# Reference` | Numbered list | **ONLY include papers that are cited in the body.** Format: `[N]. [Authors] "[Title]" [Venue], [Year]. arXiv:[ID] — [View Paper](url)` |
+| `# Reference` | Numbered list | **Derived from body citations.** Scan the body text, collect every `[N](url)`, and build the reference list from those numbers ONLY. Format: `[N]. [Authors] "[Title]" [Venue], [Year]. arXiv:[ID] — [View Paper](url)` |
 
 ### Step 1.6: Citation Cross-Check
 
-Before proceeding, perform a **bidirectional cross-check** and **fix any mismatches immediately**:
+Before proceeding, verify citation consistency:
 
-1. **Forward check**: For every `[N](url)` in the body, verify it has a matching `[N]` entry in `# Reference`. If missing, add it.
-2. **Backward check**: For every `[N]` entry in `# Reference`, verify it appears as `[N](url)` in the body. **If an entry has NO in-text citation, do ONE of the following:**
-   - If the paper is relevant to the research topic, add a citation to the most appropriate section (Problem, Rationale, Related Work, Methods, or Experiments)
-   - If the paper is not relevant enough to cite in the body, **remove it from `# Reference` entirely** — do NOT keep uncited entries in the reference list
+1. **Extract all `[N]` from the body**: Scan every section (Problem, Rationale, Related Work, Technical Approach, Datasets, Abstract, Methods, Experiments) and list all citation numbers that appear.
+2. **Rebuild `# Reference` from that list**: The Reference section should contain entries ONLY for the numbers you extracted. Remove any entry whose number does not appear in the body.
 3. **Format check**: Every in-text citation must be clickable `[N](url)` — NOT plain `[N]`
 4. **Authenticity check**: No fabricated references — all papers must have been found via `search_arxiv_papers`
-
-**Rule: `# Reference` and the body must be in perfect 1:1 correspondence — no orphans in either direction.**
+5. **Count check**: Ensure at least 6 references. If fewer, go back and add more citations to body sections (especially `# Related Work`), then rebuild Reference accordingly.
 
 ### Step 1.7: Proceed to Stage 2
 
@@ -216,16 +226,17 @@ Produce the complete revised draft addressing all identified weaknesses:
 - Follow the same format as Stage 1
 - Address every weakness identified in the review
 - Incorporate insights from supplementary literature (if searched)
-- Update in-text citations and reference list
+- Update in-text citations in body sections
+- **Rebuild `# Reference` by extracting citations from the revised body text** (same procedure as Step 1.5 — Reference is always derived from body)
 - Do NOT include any "Summary of Changes" section — the final draft should be clean
 
 ### Step 2.5: Citation Cross-Check
 
-Same procedure as Step 1.6 — perform bidirectional cross-check and **fix mismatches immediately**:
-1. Forward check: every body citation has a Reference entry
-2. Backward check: every Reference entry is cited in the body — if not, either add an in-text citation or remove the entry
+Same procedure as Step 1.6 — extract all `[N]` from the body and rebuild Reference from that list:
+1. Extract all citation numbers from body sections
+2. Rebuild `# Reference` to match exactly
 3. Format check: all citations are clickable `[N](url)`
-4. Ensure at least 10 references, each with a clickable URL
+4. Ensure at least 6 references — if fewer, add citations to body first, then rebuild Reference
 
 ### Step 2.6: Proceed to Stage 3
 
@@ -238,15 +249,15 @@ Verify, format, and deliver the final draft.
 
 ### Step 3.1: Final Verification
 
-Perform bidirectional cross-check and **fix any remaining mismatches**:
-1. **Forward check**: every `[N](url)` in the body has a matching Reference entry — if missing, add it
-2. **Backward check**: every Reference entry is cited in the body — if not, either add an in-text citation in the most appropriate section or **remove the uncited entry from Reference**
+Perform a final extraction-based verification:
+1. **Extract all `[N]` from the body**: Scan every section and list all citation numbers
+2. **Rebuild `# Reference` from that list**: Remove any Reference entry whose number does not appear in the body; add any missing entry for numbers that do appear
 3. Verify all cited papers were actually found in searches — remove any fabricated entries
-4. Ensure reference count is at least 10 — if fewer, search for more and add them
+4. Ensure reference count is at least 6 — if fewer, add citations to body sections first, then rebuild Reference
 5. Verify reference format: `[N]. [Authors] "[Title]" [Venue], [Year]. arXiv:[ID] — [View Paper](url)`
 6. Verify every in-text citation uses clickable link format `[N](url)` — NOT plain `[N]`
 
-**Final output must have zero orphan references and zero missing reference entries.**
+**Final output must have zero orphan references — this is guaranteed by always deriving Reference from body citations.**
 
 ### Step 3.2: Quality Check
 
@@ -257,7 +268,7 @@ Verify the final draft:
 - [ ] Abstract is 150-250 words
 - [ ] All references are real and properly formatted (with arXiv IDs and clickable URLs)
 - [ ] No sections are empty or placeholder
-- [ ] Minimum 10 references
+- [ ] Minimum 6 references
 - [ ] **Zero orphan references**: every Reference entry is cited at least once in the body
 - [ ] **Zero dangling citations**: every in-text `[N](url)` has a matching Reference entry
 - [ ] Every in-text citation uses `[N](url)` clickable link format (NOT plain `[N]`)
@@ -281,7 +292,7 @@ A high-quality paper draft should:
 - **Generic methods**: Proposing "deep learning" without architectural details
 - **Missing baselines**: Not comparing against well-known approaches
 - **Fabricated citations**: Referencing papers that were not actually found
-- **Orphan references (MOST COMMON BUG)**: Papers listed in `# Reference` but never cited in the body. **Fix**: either add an in-text citation in the appropriate section (use `# Related Work` as the safety net), or remove the entry from Reference entirely. Never leave a Reference entry uncited.
+- **Orphan references (MOST COMMON BUG)**: Papers listed in `# Reference` but never cited in the body. **The only correct way to prevent this**: always build `# Reference` by extracting `[N]` numbers from the body text — never build Reference independently. If you find an orphan during cross-check, delete it from Reference immediately.
 - **Non-clickable citations**: Using plain `[N]` instead of `[N](url)` — readers cannot click through to the paper
 - **Overly broad scope**: Trying to solve everything rather than focusing on a specific contribution
 - **Weak experimental design**: Missing ablations, wrong metrics, insufficient baselines

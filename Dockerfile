@@ -7,8 +7,12 @@ FROM ${UV_IMAGE} AS uv-source
 FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/python:3.12-slim-bookworm
 
 ARG NODE_MAJOR=22
-ARG APT_MIRROR
-ARG UV_INDEX_URL
+ARG APT_MIRROR=mirrors.aliyun.com
+
+# 关键修复：强制使用阿里云 PyPI 镜像
+ENV UV_PYPI_INDEX_URL=https://mirrors.aliyun.com/pypi/simple/
+ENV UV_PYPI_EXTRA_INDEX_URL=https://mirrors.aliyun.com/pypi/simple/
+ENV UV_HTTP_TIMEOUT=300
 
 # Optionally override apt mirror for restricted networks (e.g. APT_MIRROR=mirrors.aliyun.com)
 RUN if [ -n "${APT_MIRROR}" ]; then \
@@ -40,16 +44,15 @@ WORKDIR /app
 
 # Copy frontend source code
 COPY backend ./backend
-
+COPY skills ./skills
 COPY config.yaml ./config.yaml
 
 # Install dependencies with cache mount
 RUN --mount=type=cache,target=/root/.cache/uv \
-    sh -c "cd backend && UV_INDEX_URL=${UV_INDEX_URL:-https://pypi.org/simple} uv sync"
+    cd backend && uv sync
 
 # Expose ports (gateway: 8001, langgraph: 2024)
-EXPOSE 8001 9000
-
-# Default command (can be overridden in docker-compose)
+EXPOSE 2024 9000
 #CMD ["sh", "-c", "cd backend && PYTHONPATH=. uv run langgraph dev --no-browser --allow-blocking --no-reload --port 9000 --host 0.0.0.0"]
+# 启动命令（保持你原来的即可）
 CMD ["sh", "-c", "cd backend && PYTHONPATH=. uv run uvicorn app.gateway.app:app --host 0.0.0.0 --port 9000"]

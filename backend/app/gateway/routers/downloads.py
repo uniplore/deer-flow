@@ -33,7 +33,7 @@ def get_outputs_dir(thread_id: str) -> Path:
 
 
 @router.get(
-    "/{filename}",
+    "",
     summary="Download File",
     description="Download a file from a thread's outputs directory (agent-generated artifacts) as binary stream.",
 )
@@ -107,7 +107,7 @@ async def download_file(
 
 
 @router.get(
-    "",
+    "/list",
     summary="List Downloadable Files",
     description="List all files available for download in a thread's outputs directory (agent-generated artifacts).",
 )

@@ -184,11 +184,24 @@ def _build_subagent_section(max_concurrent: int) -> str:
         lines.append("- **bash**: For command execution (git, build, test, deploy operations)")
     else:
         lines.append("- **bash**: Not available in the current sandbox configuration. Use direct file/web tools or switch to AioSandboxProvider for isolated shell access.")
-    if "paper-draft-agent" in available_names:
+    paper_draft_available = "paper-draft-agent" in available_names
+    if paper_draft_available:
         lines.append("- **paper-draft-agent**: For generating, drafting, and reviewing academic research papers through a multi-stage pipeline (research ideation, literature-driven drafting, multi-perspective review, iterative refinement)")
     if "paper-summarize-agent" in available_names:
         lines.append("- **paper-summarize-agent**: For reading, analyzing, and summarizing academic papers (full summary, question-driven analysis, key findings extraction)")
     available_subagents = "\n".join(lines)
+
+    # Build auto-routing rules for specialized subagents
+    auto_routing_rules = ""
+    if paper_draft_available:
+        auto_routing_rules = f"""
+**🎯 AUTO-ROUTING RULE — Paper draft tasks MUST be delegated to the specialized subagent:**
+
+- **Paper draft generation** (keywords: "generate paper", "write paper", "draft paper", "research paper", "paper draft", "create paper", "write research", "generate draft", "论文", "写论文", "生成论文", "研究草案", "论文草案", "学术文章", "写文章", "generate research", "paper idea", "research idea"):
+  → ALWAYS delegate to `paper-draft-agent` via `task(subagent_type="paper-draft-agent", ...)`. Do NOT handle this yourself. Do NOT read the paper-draft skill file — the subagent loads it internally.
+
+**How to delegate:** Pass the user's original request as the `prompt` parameter. Do NOT pre-process, summarize, or rephrase the user's input — let the specialized subagent handle the full workflow.
+"""
     direct_tool_examples = "bash, ls, read_file, web_search, etc." if bash_available else "ls, read_file, web_search, etc."
     direct_execution_example = (
         '# User asks: "Run the tests"\n# Thinking: Cannot decompose into parallel sub-tasks\n# → Execute directly\n\nbash("npm test")  # Direct execution, not task()'
@@ -197,7 +210,7 @@ def _build_subagent_section(max_concurrent: int) -> str:
     )
     return f"""<subagent_system>
 **🚀 SUBAGENT MODE ACTIVE - DECOMPOSE, DELEGATE, SYNTHESIZE**
-
+{auto_routing_rules}
 You are running with subagent capabilities enabled. Your role is to be a **task orchestrator**:
 1. **DECOMPOSE**: Break complex tasks into parallel sub-tasks
 2. **DELEGATE**: Launch multiple subagents simultaneously using parallel `task` calls

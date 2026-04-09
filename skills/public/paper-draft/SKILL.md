@@ -146,16 +146,18 @@ Generate a concise paper draft immediately after ideation. This is a DRAFT — k
 
 | Section | Length Guideline | Content |
 |---------|-----------------|---------|
+| `# Title` | One line | **Must be the FIRST section in the draft.** Specific, publication-quality title. |
 | `# Problem` | 3-5 sentences | Core problem, background context, and why it matters, with clickable citations like "Recent studies [1](https://arxiv.org/abs/2401.12345), [2](url) have shown..." |
-| `# Rationale` | 2-4 sentences | Why it matters, what gap it fills, limitations of existing work, with clickable citations like "Existing approaches [3](url), [4](url) suffer from..." |
-| `# Related Work` | 4-8 sentences | Concise survey of closely related approaches grouped by theme. **MUST cite any papers from your search that are NOT yet cited in other sections** — this is the guaranteed citation home for all references. |
-| `# Technical Approach` | 4-7 sentences | Key concepts, algorithms, frameworks, and how components connect, with clickable citations like "Building on [5](url), we propose..." |
-| `# Datasets` | Bullet list | Datasets with one-line justification and clickable citations, e.g., "- ImageNet-1K [6](https://arxiv.org/abs/1409.0575): standard benchmark for..." |
-| `# Title` | One line | Specific, publication-quality title |
 | `# Abstract` | 150-250 words | Problem, method, expected result, contribution — no filler, with key clickable citations |
+| `# Related Work` | 4-8 sentences | Concise survey of closely related approaches grouped by theme. **MUST cite any papers from your search that are NOT yet cited in other sections** — this is the guaranteed citation home for all references. |
+| `# Rationale` | 2-4 sentences | Why it matters, what gap it fills, limitations of existing work, with clickable citations like "Existing approaches [3](url), [4](url) suffer from..." |
+| `# Technical Approach` | 4-7 sentences | Key concepts, algorithms, frameworks, and how components connect, with clickable citations like "Building on [5](url), we propose..." |
 | `# Methods` | 5-8 sentences | Model architecture, training procedure, key components, loss functions, with clickable citations like "We adopt [7](url) with modifications inspired by [8](url)" |
+| `# Datasets` | Bullet list | Datasets with one-line justification and clickable citations, e.g., "- ImageNet-1K [6](https://arxiv.org/abs/1409.0575): standard benchmark for..." |
 | `# Experiments` | 4-7 sentences | Baselines, datasets, metrics, evaluation protocol, expected results, with clickable citations like "We compare against [9](url), [10](url) as primary baselines" |
-| `# Reference` | Numbered list | **Derived from body citations.** Scan the body text, collect every `[N](url)`, and build the reference list from those numbers ONLY. Format: `[N]. [Authors] "[Title]" [Venue], [Year]. arXiv:[ID] — [View Paper](url)` |
+| `# Reference` | Numbered list | **Derived from body citations.** Scan the body text, collect every `[N](url)`, and build the reference list from those numbers ONLY. **Each entry MUST be on its own line with a blank line between entries.** Format: `[N]. [Authors] "[Title]" [Venue], [Year]. arXiv:[ID] — [View Paper](url)` |
+
+**Output order**: The draft MUST be output in the exact section order listed above — `# Title` first, `# Reference` last.
 
 ### Step 1.6: Citation Cross-Check
 
@@ -254,7 +256,7 @@ Perform a final extraction-based verification:
 2. **Rebuild `# Reference` from that list**: Remove any Reference entry whose number does not appear in the body; add any missing entry for numbers that do appear
 3. Verify all cited papers were actually found in searches — remove any fabricated entries
 4. Ensure reference count is at least 6 — if fewer, add citations to body sections first, then rebuild Reference
-5. Verify reference format: `[N]. [Authors] "[Title]" [Venue], [Year]. arXiv:[ID] — [View Paper](url)`
+5. Verify reference format: `[N]. [Authors] "[Title]" [Venue], [Year]. arXiv:[ID] — [View Paper](url)` — each entry MUST be on its own line with a blank line between entries
 6. Verify every in-text citation uses clickable link format `[N](url)` — NOT plain `[N]`
 
 **Final output must have zero orphan references — this is guaranteed by always deriving Reference from body citations.**

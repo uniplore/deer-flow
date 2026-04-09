@@ -7,7 +7,7 @@ class GatewayConfig(BaseModel):
     """Configuration for the API Gateway."""
 
     host: str = Field(default="0.0.0.0", description="Host to bind the gateway server")
-    port: int = Field(default=8001, description="Port to bind the gateway server")
+    port: int = Field(default=9000, description="Port to bind the gateway server")
     cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:3000"], description="Allowed CORS origins")
 
 

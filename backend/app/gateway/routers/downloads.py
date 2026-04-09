@@ -17,7 +17,7 @@ from deerflow.uploads.manager import (
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/api/threads/{thread_id}/downloads", tags=["downloads"])
+router = APIRouter(prefix="/api/downloads", tags=["downloads"])
 
 
 def get_outputs_dir(thread_id: str) -> Path:
